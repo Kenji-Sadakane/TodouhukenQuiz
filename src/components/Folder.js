@@ -35,6 +35,8 @@ class Folder extends Component {
   }
 
   onDragOver(e) {
+    e.stopPropagation(); // defaultで現在のドラッグイベントを初期化？するらしい。
+    e.preventDefault();  // 故に無効化しないとdropイベントが発火しない。でもdragEndは発火する。よく分からない。
     // console.log('over');
   }
 
@@ -47,10 +49,10 @@ class Folder extends Component {
   }
 
   onDrop(e) {
-    console.log('drop');
     e.stopPropagation();
     e.preventDefault();
     console.log('drop');
+    this.setState({ onDragOver: false });
   }
 
   render() {

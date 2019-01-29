@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import classnames from 'classnames';
 
 class Bookmark extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false }
+    this.state = { onDragStart: false, onDragOver: false }
     this.bindEvent();
   }
 
@@ -30,14 +32,18 @@ class Bookmark extends Component {
 
   onDragEnter(e) {
     console.log('enter');
+    this.setState({ onDragOver: true });
   }
 
   onDragOver(e) {
+    e.stopPropagation(); // defaultで現在のドラッグイベントを初期化？するらしい。
+    e.preventDefault();  // 故に無効化しないとdropイベントが発火しない。でもdragEndは発火する。よく分からない。
     // console.log('over');
   }
 
   onDragLeave(e) {
     console.log('leave');
+    this.setState({ onDragOver: false });
   }
 
   onDragEnd(e) {
@@ -45,22 +51,34 @@ class Bookmark extends Component {
   }
 
   onDrop(e) {
-    console.log('drop');
     e.stopPropagation();
     e.preventDefault();
     console.log('drop');
+    this.setState({ onDragOver: false });
   }
 
   render() {
     const { id, name, url } = this.props;
+    const className = classnames({'dragOver': this.state.onDragOver});
 
     return (
-      <div id={id} className="column" draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
-         onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop} >
-        <li><a href={url} target="_blank">{name}</a></li>
-      </div>
+      <Wrapper>
+        <div id={id} className={className} draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
+           onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop} >
+          <li><a href={url} target="_blank">{name}</a></li>
+        </div>
+      </Wrapper>
     );
   }
 }
+
+const Wrapper = styled.div`
+  .dragOver {
+    border: 2px dashed #000;
+  }
+  .dragStart {
+    opacity: 0.4;
+  }
+`;
 
 export default Bookmark;
