@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
+
 import Bookmark from './Bookmark';
 
 class Folder extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false }
+    this.state = { open: false, onDragStart: false, onDragOver: false }
     this.bindEvent();
   }
 
@@ -27,32 +29,41 @@ class Folder extends Component {
   }
 
   onDragStart(e) {
-    console.log('start');
+    console.log('onDragStart');
+    this.setState({ onDragStart: true });
   }
 
   onDragEnter(e) {
-    console.log('enter');
+    this.setState({ onDragOver: true });
   }
 
   onDragOver(e) {
     e.stopPropagation(); // defaultで現在のドラッグイベントを初期化？するらしい。
     e.preventDefault();  // 故に無効化しないとdropイベントが発火しない。でもdragEndは発火する。よく分からない。
-    // console.log('over');
   }
 
   onDragLeave(e) {
-    console.log('leave');
+    this.setState({ onDragOver: false });
   }
 
   onDragEnd(e) {
-    console.log('End');
+    console.log('onDragEnd');
+    this.setState({ onDragStart: false });
   }
 
   onDrop(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('drop');
+    console.log('onDrop');
     this.setState({ onDragOver: false });
+  }
+
+  getFolderClassName() {
+    return classnames(
+      'folder',
+      {'dragStart': this.state.onDragStart},
+      {'dragOver': this.state.onDragOver}
+    );
   }
 
   render() {
@@ -61,7 +72,7 @@ class Folder extends Component {
 
     return (
       <Wrapper>
-        <div className="column folder" draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
+        <div className={this.getFolderClassName()} draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
          onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop} >
           <input type="checkbox" id={id} checked={open} onChange={this.onCheckChange} className="folderCheck" />
           <label htmlFor={id}>{name}</label>
@@ -78,6 +89,12 @@ class Folder extends Component {
 }
 
 const Wrapper = styled.div`
+  .dragOver {
+    border: 2px dashed #000;
+  }
+  .dragStart {
+    opacity: 0.4;
+  }
   input[type="checkbox"] {
     display: none;
   }

@@ -27,43 +27,48 @@ class Bookmark extends Component {
   }
 
   onDragStart(e) {
-    console.log('start');
+    console.log('obDragStart');
+    this.setState({ onDragStart: true });
   }
 
   onDragEnter(e) {
-    console.log('enter');
     this.setState({ onDragOver: true });
   }
 
   onDragOver(e) {
     e.stopPropagation(); // defaultで現在のドラッグイベントを初期化？するらしい。
     e.preventDefault();  // 故に無効化しないとdropイベントが発火しない。でもdragEndは発火する。よく分からない。
-    // console.log('over');
   }
 
   onDragLeave(e) {
-    console.log('leave');
     this.setState({ onDragOver: false });
   }
 
   onDragEnd(e) {
-    console.log('End');
+    console.log('onDragEnd');
+    this.setState({ onDragStart: false });
   }
 
   onDrop(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('drop');
+    console.log('onDrop');
     this.setState({ onDragOver: false });
+  }
+
+  getClassName() {
+    return classnames(
+      {'dragStart': this.state.onDragStart},
+      {'dragOver': this.state.onDragOver}
+    );
   }
 
   render() {
     const { id, name, url } = this.props;
-    const className = classnames({'dragOver': this.state.onDragOver});
 
     return (
       <Wrapper>
-        <div id={id} className={className} draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
+        <div id={id} className={this.getClassName()} draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
            onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop} >
           <li><a href={url} target="_blank">{name}</a></li>
         </div>

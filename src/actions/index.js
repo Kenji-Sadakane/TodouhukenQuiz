@@ -7,3 +7,5 @@ export const onNumClick = (number) => ({
 export const onPlusClick = () => ({
   type: actionTypes.PLUS,
 });
+export const addBookmark = (title, url) => ({ type: actionTypes.ADD_BOOKMARK, title, url });
+
