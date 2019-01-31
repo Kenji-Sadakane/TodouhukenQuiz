@@ -26,6 +26,22 @@ const bookmarks = (state = initialAppState, action) => {
         { id: getMaxId(state.list) + 1, type: 'bookmark', name: action.title, url: action.url }
       ]
     };
+  } else if (action.type === actionTypes.MOVE_BOOKMARK) {
+    console.log(state);
+    const fromId = action.fromId;
+    const toId = action.toId;
+    const bookmark = getBookmarkById(state.list, fromId);
+    insertBookmark(state.list, bookmark, toId);
+//    let newlist = state.list;
+//    const fromBookmark = newlist.find((e) => e.id == fromId);
+//    const toBookmarkIndex = newlist.findIndex((e) => e.id == toId);
+//    newlist = newlist.filter((e) => e.id != fromId);
+//    newlist = {list: [
+//      ...newlist.slice(0, toBookmarkIndex),
+//      fromBookmark,
+//      ...newlist.slice(toBookmarkIndex)
+//    ]}
+    return state;
   } else {
     return state;
   }
@@ -36,6 +52,44 @@ const getMaxId = (list) => {
     let currentValue = (current.type === 'folder') ? Math.max(current.id, getMaxId(current.children)) : current.id;
     return Math.max(accumulator, currentValue);
   }, 0);
+}
+
+const getBookmarkById = (list, id) => {
+  let bookmark = list.find((e) => e.id == id);
+  if (typeof bookmark === 'undefined') {
+    list.filter((e) => e.type == 'folder').some((e) => {
+      bookmark = getBookmarkById(e.children, id);
+      return (typeof bookmark !== 'undefined');
+    });
+  }
+  return bookmark;
+}
+
+const insertBookmark = (list, bookmark, toId) => {
+  let toIdx = list.findIndex((e) => e.id == toId);
+  if (toIdx < 0) {
+    list.map((e) => {
+      if (e.type == 'folder') {
+        return insertBookmark(e.children, bookmark, toId);
+      } else {
+        return e;
+      }
+    });
+  }
+  return [
+    ...list.slice(0, toIdx),
+    bookmark,
+    ...list.slice(toIdx)
+  ];
+}
+
+const moveBookmark = (list, fromId, toId) => {
+  list.map((elem) => {
+    if (elem.id !== fromId) {
+      return elem;
+    }
+  });
+  return list;
 }
 
 export default bookmarks;

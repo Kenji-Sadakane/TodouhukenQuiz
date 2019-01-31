@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import classnames from 'classnames';
+
+import * as actions from '../actions';
 
 class Bookmark extends Component {
   constructor(props) {
@@ -28,6 +32,7 @@ class Bookmark extends Component {
 
   onDragStart(e) {
     console.log('obDragStart');
+    e.dataTransfer.setData('dragStartId', e.target.id);
     this.setState({ onDragStart: true });
   }
 
@@ -52,8 +57,11 @@ class Bookmark extends Component {
   onDrop(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('onDrop');
     this.setState({ onDragOver: false });
+    let fromId = e.dataTransfer.getData('dragStartId');
+    let toId = e.currentTarget.id;
+    console.log('onDrop from=' + fromId + ',to=' + toId);
+    this.props.actions.moveBookmark(fromId, toId);
   }
 
   getClassName() {
@@ -69,7 +77,7 @@ class Bookmark extends Component {
     return (
       <Wrapper>
         <div id={id} className={this.getClassName()} draggable="true" onDragStart={this.onDragStart} onDragEnter={this.onDragEnter}
-           onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop} >
+           onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDragEnd={this.onDragEnd} onDrop={this.onDrop}>
           <li><a href={url} target="_blank">{name}</a></li>
         </div>
       </Wrapper>
@@ -86,4 +94,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default Bookmark;
+export default connect(
+  (state, ownProps) => ({ bookmarks: state.bookmarks }),
+  (dispatch) => ({ actions: bindActionCreators(actions, dispatch) })
+)(Bookmark);
