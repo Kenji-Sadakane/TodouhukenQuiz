@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8">
-     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="manifest.json">
+    <title>都道府県シルエットクイズ</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type='text/javascript' src='./dist/bundle.js'></script>
+    <span>都道府県シルエットクイズ</span>
+    <script>
+    // service workerの登録関係
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service_worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+    </script>
   </body>
 </html>
