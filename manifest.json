@@ -1,13 +1,19 @@
 {
     "short_name": "都道府県Q",
     "name": "都道府県シルエットクイズ",
+    "description" : "都道府県のシルエット画像から何県なのか当てるクイズです。",
+    "dir": "ltr",
+    "lang" : "ja-jp",
     "display": "standalone",
     "start_url": "index.html",
     "icons": [
         {
             "src": "img/td01_hokkaido_black.jpg",
-            "sizes": "192x192",
+            "sizes": "300x300",
             "type": "image/jpg"
         }
-    ]
+    ],
+    "orientation" : "portrait",
+    "background_color" : "#FFFFFF",
+    "theme_color" : "#FFFFFF"
 }

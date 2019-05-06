@@ -1,7 +1,7 @@
 // キャッシュファイルの指定
 var CACHE_NAME = 'todouhukenQuizCaches';
 var urlsToCache = [
-    '/',
+    '/favicon.ico',
 ];
 
 // インストール処理
