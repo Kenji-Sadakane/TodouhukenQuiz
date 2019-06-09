@@ -1,0 +1,13 @@
+{
+  "name": "todouhukenquiz",
+  "version": "1.0.0",
+  "description": "表示される都道府県のシルエットが何県か４択で当てるクイズ。",
+  "main": "service_worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadakan/TodouhukenQuiz.git"
+  }
+}
