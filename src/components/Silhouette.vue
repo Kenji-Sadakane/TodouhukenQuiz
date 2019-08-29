@@ -126,11 +126,13 @@ export default {
     },
     judge: function(choice) {
       if (this.answer == choice) {
-        if (this.questionIdx < 46) {
+        if (this.questionIdx == 46) {
+          alert("全問正解 おめでとう！");
+          this.$router.push({ name: 'top' });
+        } else if (this.questionIdx < 46) {
           this.questionIdx++;
           this.setupQuestion();
         } else {
-          alert("全問正解 おめでとう！");
           this.$router.push({ name: 'top' });
         }
       } else {
@@ -142,7 +144,7 @@ export default {
   data() {
     return {
       prefectures: prefectures,
-      answers: [...Array(46).keys()],
+      answers: [...Array(47).keys()],
       questionIdx: 0,
       answer: 0,
       choice1: 0,
